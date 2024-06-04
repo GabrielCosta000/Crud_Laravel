@@ -42,7 +42,7 @@
                         <div class="row mb-3">
                             <div class="col">
                                 <label class="form-label">Preço:</label>
-                                <input type="number" name="price" class="form-control" placeholder="Preço:" value="{{$products->price}}">
+                                <input type="number" name="price" class="form-control" id="priceInput" placeholder="Preço:" value="{{$products->price}}">
                                 @error('price')
                                 <span class="text-danger">{{$message}}</span>
                                 @enderror
@@ -59,4 +59,11 @@
             </div>
         </div>
     </div>
+    <script>
+        function formatPrice() {
+            var priceInput = document.getElementById('priceInput');
+            var price = priceInput.value.replace(/[^\d,]/g, ''); // Remove todos os caracteres não numéricos exceto a vírgula
+            priceInput.value = price.replace(',', '.'); // Substitui a vírgula por ponto para garantir um formato numérico adequado
+        }
+    </script>
 </x-app-layout>

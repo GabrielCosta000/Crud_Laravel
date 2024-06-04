@@ -13,7 +13,7 @@
                     </div>
                     @endif
 
-                    <form action="{{route('admin.product.save')}}" method="POST" enctype="multipart/form-data">
+                    <form action="{{route('admin.product.save')}}" method="POST" enctype="multipart/form-data" onsubmit="formatPrice()">
                         @csrf
 
                         <div class="row mb-3">
@@ -25,7 +25,6 @@
                                 @enderror
                             </div>
                         </div>
-
 
                         <div class="row mb-3">
                             <div class="col">
@@ -40,7 +39,7 @@
                         <div class="row mb-3">
                             <div class="col">
                                 <label class="form-label">Preço:</label>
-                                <input type="number" name="price" class="form-control" placeholder="Preço:">
+                                <input type="text" name="price" id="priceInput" class="form-control" placeholder="Preço:">
                                 @error('price')
                                 <span class="text-danger">{{$message}}</span>
                                 @enderror
@@ -57,4 +56,13 @@
             </div>
         </div>
     </div>
+
+    <!-- Script para formatar o preço antes de enviar o formulário -->
+    <script>
+        function formatPrice() {
+            var priceInput = document.getElementById('priceInput');
+            var price = priceInput.value.replace(/[^\d,]/g, ''); // Remove todos os caracteres não numéricos exceto a vírgula
+            priceInput.value = price.replace(',', '.'); // Substitui a vírgula por ponto para garantir um formato numérico adequado
+        }
+    </script>
 </x-app-layout>
