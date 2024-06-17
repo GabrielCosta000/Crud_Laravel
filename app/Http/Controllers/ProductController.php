@@ -4,24 +4,26 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Product;
+use App\Models\Category;
 
 class ProductController extends Controller{
     public function index(){
-        $products = Product::orderBy('id', 'desc')->get();
+        $products = Product::with('categoria')->orderBy('id', 'desc')->get();
         $total = Product::count();
-        return view('admin.product.home', compact(['products', 'total']));
+        $categories = Category::all();
+        return view('admin.product.home' , compact(['products', 'total', 'categories']));
     }
 
     public function create(){
-        return view('admin.product.create');
+        $categories = Category::all();
+        return view('admin.product.create', compact('categories'));
     }
 
     public function save(Request $request){
         $validation = $request->validate([
             'title' => 'required',
-            'category' => 'required',
+            'category_id' => 'required',
             'price' => 'required',
-
         ]);
         $data = Product::create($validation);
         if ($data) {
@@ -35,7 +37,8 @@ class ProductController extends Controller{
 
     public function edit($id){
         $products = Product::findOrFail($id);
-        return view('admin.product.update', compact('products'));
+        $categories = Category::all();
+        return view('admin.product.update', compact('products', 'categories'));
     }
 
     public function update(Request $request, $id){

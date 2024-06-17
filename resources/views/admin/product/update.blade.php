@@ -5,10 +5,6 @@
                 <div class="p-6 text-white">
                     <h1 class="mb-0">Editar produto:</h1>
 
-                    <p>
-                        <a href="{{ route('admin.product') }}" class="btn btn-primary">Voltar</a>
-                    </p>
-
                     @if(Session::has('success'))
                     <div class="alert alert-success" role="alert">
                         {{ Session::get('success') }}
@@ -29,20 +25,22 @@
                             </div>
                         </div>
 
-                        <div class="row mb-3">
-                            <div class="col">
-                                <label class="form-label">Categoria:</label>
-                                <input type="text" name="category" class="form-control" placeholder="Categoria:" value="{{$products->category}}">
-                                @error('category')
-                                <span class="text-danger">{{$message}}</span>
-                                @enderror
-                            </div>
+                        <div class="form-group">
+                            <label for="category">Categoria</label>
+                            <select name="category" id="category" class="form-control" required>
+                                <option value="">Selecione uma categoria</option>
+                                @foreach($categories as $category)
+                                    <option value="{{ $category->id }}">
+                                        {{ $category->category }}
+                                    </option>
+                                @endforeach
+                            </select>
                         </div>
 
                         <div class="row mb-3">
                             <div class="col">
                                 <label class="form-label">Preço:</label>
-                                <input type="number" name="price" class="form-control" id="priceInput" placeholder="Preço:" value="{{$products->price}}">
+                                <input type="text" name="price" class="form-control" id="priceInput" placeholder="Preço:" value="{{$products->price}} ">
                                 @error('price')
                                 <span class="text-danger">{{$message}}</span>
                                 @enderror
@@ -52,6 +50,7 @@
                         <div class="row">
                             <div class="d-grid">
                                 <button class="btn btn-primary">Editar</button>
+                                <a href="{{ route('admin.product') }}" class="btn btn-primary mt-2">Voltar</a>
                             </div>
                         </div>
                     </form>
@@ -59,11 +58,12 @@
             </div>
         </div>
     </div>
+
     <script>
-        function formatPrice() {
+        // Quando a página é carregada, substituir vírgulas por pontos no campo de preço
+        document.addEventListener('DOMContentLoaded', function() {
             var priceInput = document.getElementById('priceInput');
-            var price = priceInput.value.replace(/[^\d,]/g, ''); // Remove todos os caracteres não numéricos exceto a vírgula
-            priceInput.value = price.replace(',', '.'); // Substitui a vírgula por ponto para garantir um formato numérico adequado
-        }
+            priceInput.value = priceInput.value.replace(',', '.');
+        });
     </script>
 </x-app-layout>
